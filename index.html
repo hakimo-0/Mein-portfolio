@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arguiouane Abdelhakim — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<style>
+/* ═══ CUSTOM CURSOR ═══ */
+.cursor-glow{
+  position:fixed;width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,.06),transparent 70%);
+  pointer-events:none;z-index:9999;transform:translate(-50%,-50%);
+  transition:opacity .4s;
+}
+
+/* ═══ TYPING CURSOR ═══ */
+.typing-cursor{
+  display:inline-block;width:2px;height:1em;
+  background:var(--p2);margin-left:2px;vertical-align:middle;
+  animation:cursorBlink .8s ease-in-out infinite;
+}
+@keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ═══ SCROLL REVEAL ═══ */
+.reveal{
+  opacity:0;transform:translateY(24px);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ═══ TILT CARD ═══ */
+.tilt-card{transform-style:preserve-3d;transition:transform .15s ease;}
+
+/* ═══ SKILL TAG HOVER GLOW ═══ */
+.tag{transition:all .25s;}
+.tag:hover{background:rgba(99,102,241,.18);border-color:rgba(99,102,241,.4);color:var(--p2);transform:translateY(-2px);box-shadow:0 4px 14px rgba(99,102,241,.2);}
+
+/* ═══ PROGRESS RING ═══ */
+.lang-ring-wrap{position:relative;width:46px;height:46px;margin:0 auto 10px;}
+.lang-ring-wrap svg{position:absolute;top:0;left:0;transform:rotate(-90deg)}
+.lang-ring-icon{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:16px;
+}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.07);stroke-width:3}
+.ring-fill{fill:none;stroke-width:3;stroke-linecap:round;
+  transition:stroke-dashoffset 1.2s cubic-bezier(.16,1,.3,1);}
+
+/* ═══ STATS PULSE ═══ */
+.stat-card{transition:all .3s cubic-bezier(.16,1,.3,1);}
+.stat-card:hover{transform:translateY(-4px) scale(1.02);border-color:rgba(99,102,241,.3);box-shadow:0 16px 40px rgba(0,0,0,.35);}
+
+/* ═══ NAV TOOLTIP ═══ */
+.nav-item{position:relative;}
+.nav-item .nav-tooltip{
+  position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);
+  background:rgba(13,21,38,.95);border:1px solid rgba(99,102,241,.25);
+  border-radius:7px;padding:4px 10px;font-size:11px;color:var(--t1);
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .2s;z-index:200;
+}
+.nav-item:hover .nav-tooltip{opacity:1}
+
+/* ═══ TIMELINE ANIMATED DOT ═══ */
+.tl-item{cursor:default;transition:all .2s;}
+.tl-item:hover .tl-title{color:var(--p2);}
+.tl-item:hover{transform:translateX(4px);}
+
+/* ═══ FRAMEWORK BADGES ═══ */
+.fw-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:20px;
+  font-size:11px;font-weight:600;
+  background:rgba(6,182,212,.07);
+  border:1px solid rgba(6,182,212,.2);
+  color:var(--accent);margin:3px;
+  transition:all .25s;
+}
+.fw-badge:hover{background:rgba(6,182,212,.14);transform:translateY(-2px);box-shadow:0 4px 14px rgba(6,182,212,.15);}
+
+/* ═══ EXPERIENCE BADGE ANIMATION ═══ */
+.exp-live-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);
+  border-radius:20px;padding:3px 10px;font-size:10px;font-weight:600;color:var(--green);
+}
+.exp-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s ease-in-out infinite;}
+
+/* ═══ SCROLL PROGRESS BAR ═══ */
+.scroll-bar{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--p3),var(--accent));
+  z-index:1000;transition:width .1s linear;
+}
+
+/* ═══ CARD SHIMMER ═══ */
+@keyframes cardShimmer{
+  0%{background-position:200% center}
+  100%{background-position:-200% center}
+}
+.shimmer-line{
+  height:1px;width:100%;
+  background:linear-gradient(90deg,transparent,rgba(99,102,241,.4),transparent);
+  background-size:200% auto;
+  animation:cardShimmer 3s linear infinite;
+  margin-bottom:16px;
+}
+
+/* ═══ SECTION TITLE ACCENT ═══ */
+.section-accent{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--p2);margin-bottom:4px;
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="scroll-bar" id="scrollBar"></div>
+
+<canvas id="particles"></canvas>
+<div class="glow-orb a"></div>
+<div class="glow-orb b"></div>
+<div class="glow-orb c"></div>
+
+<div class="layout">
+
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <aside class="sidebar">
+
+    <div class="sb-brand">
+      <span class="sb-brand-name">Mein Portfolio</span>
+    </div>
+
+    <div class="sb-avatar-wrap">
+      <div class="avatar-ring">
+        <div class="avatar-inner">
+          <img src="img/img cv.jpeg" alt="Profilbild" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:var(--font-h);font-size:24px;font-weight:800;color:var(--p2)\'>AA</div>'">
+        </div>
+      </div>
+      <div class="sb-name">Arguiouane Abdelhakim</div>
+      <div class="sb-role">Frontend &amp; Backend Entwickler</div>
+      <div>
+        <span class="online-badge">
+          <span class="online-dot"></span>
+          Verfügbar
+        </span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div class="nav-label">Navigation</div>
+      <div class="nav-item active" onclick="switchTab('overview',this)">
+        <div class="nav-icon"><i class="fa-solid fa-house"></i></div>
+        Überblick
+        <span class="nav-tooltip">Allgemeiner Überblick</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('skills',this)">
+        <div class="nav-icon"><i class="fa-solid fa-bolt"></i></div>
+        Fähigkeiten
+        <span class="nav-tooltip">Skills &amp; Technologien</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('experience',this)">
+        <div class="nav-icon"><i class="fa-solid fa-briefcase"></i></div>
+        Erfahrung
+        <span class="nav-tooltip">Beruflicher Werdegang</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('projects',this)">
+        <div class="nav-icon"><i class="fa-solid fa-rocket"></i></div>
+        Projekte
+        <span class="nav-tooltip">Meine Projekte</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('more',this)">
+        <div class="nav-icon"><i class="fa-solid fa-sparkles"></i></div>
+        Mehr
+        <span class="nav-tooltip">Hobbys &amp; Kontakt</span>
+      </div>
+    </div>
+
+    <div class="sb-footer">
+      <div class="dl-card">
+        <a href="lebenslauf/lebenslauf.pdf" download class="dl-btn" target="_blank">
+          <i class="fa-solid fa-file-arrow-down"></i>
+          Lebenslauf herunterladen
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <main class="main" id="mainScroll">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="page-title">Allgemeiner Überblick<span class="typing-cursor" id="typingCursor"></span></div>
+        <div class="topbar-sub" id="page-sub">Willkommen auf meinem interaktiven Dashboard</div>
+      </div>
+      <div class="topbar-actions">
+        <a href="contact.html" class="btn-ghost" target="_blank">
+          <i class="fa-solid fa-envelope"></i> Kontakt
+        </a>
+        <button class="btn-solid" onclick="window.open('https://github.com/hakimo-0')">
+          <i class="fa-brands fa-github"></i> GitHub
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════ TAB: OVERVIEW ══════ -->
+    <div id="tab-overview" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card stagger-1 reveal">
+          <div class="stat-icon-wrap" style="background:rgba(99,102,241,.12)">
+            <i class="fa-solid fa-briefcase" style="color:#818cf8;font-size:16px"></i>
+          </div>
+          <div class="stat-val" style="color:#818cf8">2</div>
+          <div class="stat-lbl">Praktikum</div>
+        </div>
+        <div class="stat-card stagger-2 reveal">
+          <div class="stat-icon-wrap" style="background:rgba(16,185,129,.1)">
+            <i class="fa-solid fa-rocket" style="color:#34d399;font-size:16px"></i>
+          </div>
+          <div class="stat-val" style="color:#34d399">2</div>
+          <div class="stat-lbl">Abgeschlossenes Projekt</div>
+        </div>
+        <div class="stat-card stagger-3 reveal">
+          <div class="stat-icon-wrap" style="background:rgba(245,158,11,.1)">
+            <i class="fa-solid fa-earth-africa" style="color:#fbbf24;font-size:16px"></i>
+          </div>
+          <div class="stat-val" style="color:#fbbf24">4</div>
+          <div class="stat-lbl">Sprachen</div>
+        </div>
+        <div class="stat-card stagger-4 reveal">
+          <div class="stat-icon-wrap" style="background:rgba(244,114,182,.1)">
+            <i class="fa-solid fa-layer-group" style="color:#f472b6;font-size:16px"></i>
+          </div>
+          <div class="stat-val" style="color:#f472b6">15+</div>
+          <div class="stat-lbl">Technologien</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card reveal tilt-card">
+          <div class="card-head"><div class="card-head-dot"></div>Profil</div>
+          <div class="shimmer-line"></div>
+          <p style="font-size:12.5px;color:var(--t2);line-height:1.85;margin-bottom:16px">
+            Ich bin eine motivierte Persönlichkeit mit starkem technischem Verständnis und Begeisterung für die <strong style="color:var(--p2)">Anwendungsentwicklung</strong>. Durch eigene Projekte besitze ich fundierte Kenntnisse in Web-Technologien wie <strong style="color:var(--p2)">Laravel</strong> und <strong style="color:var(--p2)">Bootstrap 5</strong>. Logisches Denken und Teamfähigkeit zeichnen meine Arbeitsweise aus.
+          </p>
+          <div>
+            <span class="tag green"><i class="fa-solid fa-circle-check" style="font-size:9px"></i> Verfügbar</span>
+            <span class="tag"><i class="fa-solid fa-location-dot" style="font-size:9px"></i> Errachidia, Marokko</span>
+            <span class="tag"><i class="fa-solid fa-cake-candles" style="font-size:9px"></i> 26.01.2005</span>
+          </div>
+        </div>
+        <div class="card reveal tilt-card">
+          <div class="card-head"><div class="card-head-dot"></div>Ausbildung</div>
+          <div class="shimmer-line"></div>
+          <div class="tl-item">
+            <div class="tl-date">Okt 2024 — Derzeit</div>
+            <div class="tl-title">Ausbildung in Web-Entwicklung</div>
+            <div class="tl-sub">ESIAS — Frontend, Backend &amp; Design</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">Sep 2024 — Dez 2025</div>
+            <div class="tl-title">B1-Deutschkurs (telc-Zertifikat)</div>
+            <div class="tl-sub">Erfolgreicher Abschluss · Prüfung in Rabat</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">Jun 2024</div>
+            <div class="tl-title">Abitur in Physikwissenschaften (Baccalauréat)</div>
+            <div class="tl-sub">Lycée Manarat Tafilalt Errachidia</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-head"><div class="card-head-dot"></div>Sprachen</div>
+        <div class="shimmer-line"></div>
+        <div class="lang-grid">
+          <!-- Arabic -->
+          <div class="lang-item">
+            <div class="lang-ring-wrap">
+              <svg viewBox="0 0 46 46" width="46" height="46">
+                <circle class="ring-bg" cx="23" cy="23" r="20"/>
+                <circle class="ring-fill" cx="23" cy="23" r="20"
+                  stroke="#c0392b"
+                  stroke-dasharray="125.6"
+                  stroke-dashoffset="0"
+                  data-offset="0"/>
+              </svg>
+              <div class="lang-ring-icon"><i class="fa-solid fa-language" style="color:#c0392b"></i></div>
+            </div>
+            <div class="lang-name">Arabisch</div>
+            <div class="lang-level">Muttersprache</div>
+            <div class="lang-dots">
+              <div class="lang-dot on"></div><div class="lang-dot on"></div>
+              <div class="lang-dot on"></div><div class="lang-dot on"></div>
+              <div class="lang-dot on"></div>
+            </div>
+          </div>
+          <!-- German -->
+          <div class="lang-item">
+            <div class="lang-ring-wrap">
+              <svg viewBox="0 0 46 46" width="46" height="46">
+                <circle class="ring-bg" cx="23" cy="23" r="20"/>
+                <circle class="ring-fill" cx="23" cy="23" r="20"
+                  stroke="#ffcc00"
+                  stroke-dasharray="125.6"
+                  stroke-dashoffset="37.68"
+                  data-offset="37.68"/>
+              </svg>
+              <div class="lang-ring-icon"><i class="fa-solid fa-language" style="color:#000;background:#ffcc00;border-radius:3px;padding:2px 4px"></i></div>
+            </div>
+            <div class="lang-name">Deutsch</div>
+            <div class="lang-level">B1 TELC · Ziel: B2</div>
+            <div class="lang-dots">
+              <div class="lang-dot on"></div><div class="lang-dot on"></div>
+              <div class="lang-dot on"></div><div class="lang-dot"></div>
+              <div class="lang-dot"></div>
+            </div>
+          </div>
+          <!-- English -->
+          <div class="lang-item">
+            <div class="lang-ring-wrap">
+              <svg viewBox="0 0 46 46" width="46" height="46">
+                <circle class="ring-bg" cx="23" cy="23" r="20"/>
+                <circle class="ring-fill" cx="23" cy="23" r="20"
+                  stroke="#6366f1"
+                  stroke-dasharray="125.6"
+                  stroke-dashoffset="37.68"
+                  data-offset="37.68"/>
+              </svg>
+              <div class="lang-ring-icon"><i class="fa-solid fa-language" style="color:#6366f1"></i></div>
+            </div>
+            <div class="lang-name">Englisch</div>
+            <div class="lang-level">B2</div>
+            <div class="lang-dots">
+              <div class="lang-dot on"></div><div class="lang-dot on"></div>
+              <div class="lang-dot on"></div><div class="lang-dot on"></div>
+              <div class="lang-dot"></div>
+            </div>
+          </div>
+          <!-- French -->
+          <div class="lang-item">
+            <div class="lang-ring-wrap">
+              <svg viewBox="0 0 46 46" width="46" height="46">
+                <circle class="ring-bg" cx="23" cy="23" r="20"/>
+                <circle class="ring-fill" cx="23" cy="23" r="20"
+                  stroke="#003189"
+                  stroke-dasharray="125.6"
+                  stroke-dashoffset="50.24"
+                  data-offset="50.24"/>
+              </svg>
+              <div class="lang-ring-icon"><i class="fa-solid fa-language" style="color:#003189"></i></div>
+            </div>
+            <div class="lang-name">Französisch</div>
+            <div class="lang-level">B1</div>
+            <div class="lang-dots">
+              <div class="lang-dot on"></div><div class="lang-dot on"></div>
+              <div class="lang-dot on"></div><div class="lang-dot"></div>
+              <div class="lang-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ TAB: SKILLS ══════ -->
+    <div id="tab-skills" class="tab-content">
+      <div class="grid-2" style="margin-bottom:16px">
+        <div class="card reveal tilt-card">
+          <div class="card-head"><div class="card-head-dot"></div>Programmiersprachen</div>
+          <div class="shimmer-line"></div>
+          <div class="skill-row">
+            <div class="skill-top"><span>JavaScript (ES6+)</span><span class="skill-pct">75%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-pct="75"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>PHP 8</span><span class="skill-pct">70%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-pct="70"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>SQL / MySQL</span><span class="skill-pct">65%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-pct="65"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>Python</span><span class="skill-pct">60%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-pct="60"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>C / C++ / C#</span><span class="skill-pct">50%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-pct="50"></div></div>
+          </div>
+        </div>
+        <div class="card reveal tilt-card">
+          <div class="card-head"><div class="card-head-dot"></div>Technologien &amp; Tools</div>
+          <div class="shimmer-line"></div>
+          <div class="tool-section">
+            <div class="tool-label"><i class="fa-solid fa-globe" style="font-size:9px"></i> Web</div>
+            <span class="tag"><i class="fa-brands fa-html5" style="font-size:10px;color:#e34f26"></i> HTML5</span>
+            <span class="tag"><i class="fa-brands fa-css3-alt" style="font-size:10px;color:#1572b6"></i> CSS3</span>
+            <span class="tag"><i class="fa-brands fa-bootstrap" style="font-size:10px;color:#7952b3"></i> Bootstrap 5</span>
+            <span class="tag"><i class="fa-solid fa-wind" style="font-size:10px;color:#06b6d4"></i> Tailwind CSS</span>
+          </div>
+          <div class="tool-section">
+            <div class="tool-label"><i class="fa-solid fa-cubes" style="font-size:9px"></i> Frameworks</div>
+            <span class="fw-badge"><i class="fa-brands fa-laravel" style="font-size:10px"></i> Laravel</span>
+            <span class="fw-badge"><i class="fa-solid fa-code" style="font-size:10px"></i> jQuery</span>
+            <span class="fw-badge"><i class="fa-solid fa-plug" style="font-size:10px"></i> REST-APIs</span>
+          </div>
+          <div class="tool-section">
+            <div class="tool-label"><i class="fa-solid fa-database" style="font-size:9px"></i> Datenbanken</div>
+            <span class="tag amber"><i class="fa-solid fa-database" style="font-size:10px"></i> MySQL</span>
+            <span class="tag amber"><i class="fa-solid fa-database" style="font-size:10px"></i> MariaDB</span>
+            <span class="tag amber"><i class="fa-solid fa-leaf" style="font-size:10px;color:#4db33d"></i> MongoDB</span>
+          </div>
+          <div class="tool-section">
+            <div class="tool-label"><i class="fa-solid fa-pen-ruler" style="font-size:9px"></i> Design</div>
+            <span class="tag cyan"><i class="fa-brands fa-adobe" style="font-size:10px"></i> Photoshop</span>
+            <span class="tag cyan"><i class="fa-brands fa-adobe" style="font-size:10px"></i> Illustrator</span>
+          </div>
+          <div class="tool-section">
+            <div class="tool-label"><i class="fa-solid fa-screwdriver-wrench" style="font-size:9px"></i> Entwicklungstools</div>
+            <span class="tag"><i class="fa-brands fa-git-alt" style="font-size:10px"></i> Git</span>
+            <span class="tag"><i class="fa-brands fa-github" style="font-size:10px"></i> GitHub</span>
+            <span class="tag"><i class="fa-solid fa-code" style="font-size:10px"></i> VS Code</span>
+            <span class="tag"><i class="fa-brands fa-microsoft" style="font-size:10px"></i> MS Office 365</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-head"><div class="card-head-dot"></div>Soft Skills</div>
+        <div class="shimmer-line"></div>
+        <div class="soft-grid">
+          <div class="soft-item"><i class="fa-solid fa-brain" style="color:var(--p2)"></i> Analytisches Denken</div>
+          <div class="soft-item"><i class="fa-solid fa-people-group" style="color:var(--p2)"></i> Teamfähigkeit</div>
+          <div class="soft-item"><i class="fa-solid fa-comments" style="color:var(--p2)"></i> Kommunikationsfähigkeit</div>
+          <div class="soft-item"><i class="fa-solid fa-lightbulb" style="color:var(--p2)"></i> Lernbereitschaft</div>
+          <div class="soft-item"><i class="fa-solid fa-fire" style="color:var(--p2)"></i> Motivation</div>
+          <div class="soft-item"><i class="fa-solid fa-shield-check" style="color:var(--p2)"></i> Zuverlässigkeit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ TAB: EXPERIENCE ══════ -->
+    <div id="tab-experience" class="tab-content">
+      <!-- Current internship -->
+      <div class="exp-card reveal" style="margin-bottom:16px">
+        <div class="exp-header">
+          <div>
+            <div class="exp-role">IT-Praktikum</div>
+            <div class="exp-company">Office Régionale de Mise en Valeur Agricole (ORMVA)</div>
+          </div>
+          <span class="exp-live-badge">
+            <span class="exp-live-dot"></span>
+            März 2026 · Laufend
+          </span>
+        </div>
+        <div class="exp-meta">
+          <span><i class="fa-solid fa-location-dot"></i> Errachidia, Marokko</span>
+          <span><i class="fa-solid fa-calendar"></i> 23.03.2026 – Derzeit</span>
+          <span><i class="fa-solid fa-laptop-code"></i> Web-Entwicklung</span>
+        </div>
+        <hr class="exp-divider"/>
+        <div class="task-row">
+          <div class="task-icon"><i class="fa-brands fa-php"></i></div>
+          <span>Backend-Programmierung mit PHP und MySQL</span>
+        </div>
+        <div class="task-row">
+          <div class="task-icon"><i class="fa-solid fa-palette"></i></div>
+          <span>Gestaltung dynamischer Benutzeroberflächen mit JavaScript und CSS</span>
+        </div>
+        <div class="task-row">
+          <div class="task-icon"><i class="fa-solid fa-code"></i></div>
+          <span>Erste Erfahrungen in der Softwareentwicklung</span>
+        </div>
+        <div class="task-row">
+          <div class="task-icon"><i class="fa-brands fa-git-alt"></i></div>
+          <span>Zusammenarbeit im Team unter Anwendung von Git</span>
+        </div>
+      </div>
+
+      <!-- Previous internship -->
+      <div class="exp-card reveal">
+        <div class="exp-header">
+          <div>
+            <div class="exp-role">IT-Praktikum</div>
+            <div class="exp-company">Assurance SanLam</div>
+          </div>
+          <span class="tag green"><i class="fa-solid fa-check" style="font-size:9px"></i> April 2025 · 1 Monat</span>
+        </div>
+        <div class="exp-meta">
+          <span><i class="fa-solid fa-location-dot"></i> Errachidia, Marokko</span>
+          <span><i class="fa-solid fa-calendar"></i> IT-Praktikum — 1 Monat</span>
+          <span><i class="fa-solid fa-laptop-code"></i> Web-Entwicklung</span>
+        </div>
+        <hr class="exp-divider"/>
+        <div class="task-row">
+          <div class="task-icon"><i class="fa-solid fa-globe"></i></div>
+          <span>Erstellung kleiner Webseiten</span>
+        </div>
+        <div class="task-row">
+          <div class="task-icon"><i class="fa-solid fa-wrench"></i></div>
+          <span>Unterstützung bei einfachen IT-Aufgaben</span>
+        </div>
+        <div class="task-row">
+          <div class="task-icon"><i class="fa-brands fa-html5"></i></div>
+          <span>Anwendung von HTML, CSS und JavaScript</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ TAB: PROJECTS ══════ -->
+    <div id="tab-projects" class="tab-content">
+      <div class="proj-card reveal" onmousemove="trackMouse(event,this)">
+        <div class="proj-top">
+          <div>
+            <div class="proj-title">E-Commerce-Website — Bekleidung</div>
+            <div class="proj-subtitle">Persönliches Fullstack-Projekt</div>
+          </div>
+          <div class="proj-icon-wrap">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+        </div>
+        <p class="proj-desc">
+          Konzeption und Umsetzung eines Online-Shops. Frontend mit HTML, CSS und JavaScript entwickelt. Backend mit PHP und SQL für die Produkt- und Benutzerverwaltung. GitHub-Repository verfügbar.
+        </p>
+        <div style="margin-bottom:12px">
+          <span class="tag"><i class="fa-brands fa-html5" style="font-size:9px;color:#e34f26"></i> HTML5</span>
+          <span class="tag"><i class="fa-brands fa-css3-alt" style="font-size:9px;color:#1572b6"></i> CSS3</span>
+          <span class="tag"><i class="fa-brands fa-js" style="font-size:9px;color:#f7df1e"></i> JavaScript</span>
+          <span class="tag"><i class="fa-brands fa-php" style="font-size:9px;color:#8892be"></i> PHP</span>
+          <span class="tag"><i class="fa-solid fa-database" style="font-size:9px"></i> SQL</span>
+          <span class="tag green" style="margin-top:8px;display:inline-flex">
+            <i class="fa-solid fa-circle-check" style="font-size:9px"></i> Abgeschlossen
+          </span>
+        </div>
+        <a href="https://github.com/hakimo-0/E-Commerce-Website" target="_blank" class="btn-ghost" style="font-size:11px;padding:7px 14px">
+          <i class="fa-brands fa-github"></i> GitHub ansehen
+        </a>
+    </div>
+
+
+
+    <div class="proj-card reveal visible" onmousemove="trackMouse(event,this)" style="--mx: 296px; --my: 86px;">
+      <div class="proj-top">
+        <div>
+          <div class="proj-title">login-system-fullstack</div>
+          <div class="proj-subtitle">Persönliches Fullstack-Projekt</div>
+        </div>
+        <div class="proj-icon-wrap">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+      </div>
+      <p class="proj-desc">
+        Entwicklung eines sicheren Login-Systems mit Registrierung, Login/Logout und Passwort-Zurücksetzen. Backend mit PHP und SQL, E-Mail-Versand über PHPMailer.          </p>
+      <div style="margin-bottom:12px">
+        <span class="tag"><i class="fa-brands fa-html5" style="font-size:9px;color:#e34f26"></i> HTML5</span>
+        <span class="tag"><i class="fa-brands fa-css3-alt" style="font-size:9px;color:#1572b6"></i> CSS3</span>
+        <span class="tag"><i class="fa-brands fa-php" style="font-size:9px;color:#8892be"></i> PHP</span>
+        <span class="tag"><i class="fa-solid fa-database" style="font-size:9px"></i> SQL</span>
+        <span class="tag"><i class="fa-brands fa-php" style="font-size:9px;color:#8892be"></i> PHPMailer</span>
+        <span class="tag green" style="margin-top:8px;display:inline-flex">
+          <i class="fa-solid fa-circle-check" style="font-size:9px"></i> Abgeschlossen
+        </span>
+      </div>
+      <a href="https://github.com/hakimo-0/login-system-fullstack" target="_blank" class="btn-ghost" style="font-size:11px;padding:7px 14px">
+        <i class="fa-brands fa-github"></i> GitHub ansehen
+      </a>
+    </div>
+  </div>
+
+    <!-- ══════ TAB: MORE ══════ -->
+    <div id="tab-more" class="tab-content">
+      <div class="grid-2" style="margin-bottom:16px">
+        <div class="card reveal tilt-card">
+          <div class="card-head"><div class="card-head-dot"></div>Hobbys</div>
+          <div class="shimmer-line"></div>
+          <div>
+            <span class="hobby-pill"><i class="fa-solid fa-person-swimming" style="color:var(--p2)"></i> Schwimmen</span>
+            <span class="hobby-pill"><i class="fa-solid fa-futbol" style="color:var(--p2)"></i> Fußball</span>
+            <span class="hobby-pill"><i class="fa-solid fa-circle-dot" style="color:var(--p2)"></i> Billard</span>
+          </div>
+        </div>
+        <div class="card reveal tilt-card">
+          <div class="card-head"><div class="card-head-dot"></div>Zusätzliche Qualifikationen</div>
+          <div class="shimmer-line"></div>
+          <div class="permis-box">
+            <i class="fa-solid fa-car" style="color:var(--p2);font-size:18px"></i>
+            Führerschein Klasse B (gültig)
+          </div>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="card-head"><div class="card-head-dot"></div>Kontakt</div>
+        <div class="shimmer-line"></div>
+        <div class="contact-grid">
+          <div class="contact-mini">
+            <div class="contact-mini-label"><i class="fa-solid fa-envelope"></i> E-Mail</div>
+            <div class="contact-mini-val"><a href="mailto:arguiouane.abdelhakim@gmail.com" style="color:var(--p2);text-decoration:none">arguiouane.abdelhakim@gmail.com</a></div>
+          </div>
+          <div class="contact-mini">
+            <div class="contact-mini-label"><i class="fa-solid fa-phone"></i> Telefon</div>
+            <div class="contact-mini-val">+212 693 531 044</div>
+          </div>
+          <div class="contact-mini">
+            <div class="contact-mini-label"><i class="fa-solid fa-location-dot"></i> Standort</div>
+            <div class="contact-mini-val">Errachidia, Marokko</div>
+          </div>
+          <div class="contact-mini">
+            <div class="contact-mini-label"><i class="fa-brands fa-github"></i> GitHub</div>
+            <div class="contact-mini-val"><a href="https://github.com/hakimo-0" target="_blank" style="color:var(--p2);text-decoration:none">github.com/hakimo-0</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══════════════ MOBILE BOTTOM NAV ══════════════ -->
+<nav class="mobile-nav">
+  <button class="mob-nav-item active" onclick="switchTab('overview',this)" data-mob>
+    <i class="fa-solid fa-house"></i>
+    Überblick
+  </button>
+  <button class="mob-nav-item" onclick="switchTab('skills',this)" data-mob>
+    <i class="fa-solid fa-bolt"></i>
+    Skills
+  </button>
+  <button class="mob-nav-item" onclick="switchTab('experience',this)" data-mob>
+    <i class="fa-solid fa-briefcase"></i>
+    Erfahrung
+  </button>
+  <button class="mob-nav-item" onclick="switchTab('projects',this)" data-mob>
+    <i class="fa-solid fa-rocket"></i>
+    Projekte
+  </button>
+  <button class="mob-nav-item" onclick="switchTab('more',this)" data-mob>
+    <i class="fa-solid fa-ellipsis"></i>
+    Mehr
+  </button>
+</nav>
+
+<script>
+/* ═══════════════════════════════════════
+   CUSTOM CURSOR GLOW
+═══════════════════════════════════════ */
+const cursorGlow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  cursorGlow.style.left = e.clientX + 'px';
+  cursorGlow.style.top  = e.clientY + 'px';
+});
+
+/* ═══════════════════════════════════════
+   SCROLL PROGRESS BAR
+═══════════════════════════════════════ */
+const main = document.getElementById('mainScroll');
+const scrollBar = document.getElementById('scrollBar');
+main.addEventListener('scroll', () => {
+  const pct = main.scrollTop / (main.scrollHeight - main.clientHeight) * 100;
+  scrollBar.style.width = pct + '%';
+});
+
+/* ═══════════════════════════════════════
+   PARTICLES
+═══════════════════════════════════════ */
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+class Particle{
+  constructor(){this.reset()}
+  reset(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.r=Math.random()*1.5+.5;
+    this.vx=(Math.random()-.5)*.3; this.vy=(Math.random()-.5)*.3;
+    this.alpha=Math.random()*.6+.1;
+    this.color=Math.random()>.5?'99,102,241':'6,182,212';
+  }
+  update(){ this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset(); }
+  draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fillStyle=`rgba(${this.color},${this.alpha})`; ctx.fill(); }
+}
+for(let i=0;i<90;i++) particles.push(new Particle());
+function drawConnections(){
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){ ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=`rgba(99,102,241,${.12*(1-d/120)})`; ctx.lineWidth=.5; ctx.stroke(); }
+    }
+  }
+}
+function animate(){ ctx.clearRect(0,0,W,H); drawConnections(); particles.forEach(p=>{p.update();p.draw()}); requestAnimationFrame(animate); }
+animate();
+
+/* ═══════════════════════════════════════
+   TYPING EFFECT ON TITLE
+═══════════════════════════════════════ */
+let typingTimeout = null;
+function typeTitle(text, el) {
+  if(typingTimeout) clearTimeout(typingTimeout);
+  el.textContent = '';
+  let i = 0;
+  function type() {
+    if(i < text.length) {
+      el.textContent += text[i++];
+      typingTimeout = setTimeout(type, 30);
+    }
+  }
+  type();
+}
+
+/* ═══════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════ */
+const tabMeta = {
+  overview:   {title:'Allgemeiner Überblick',       sub:'Willkommen auf meinem interaktiven Dashboard'},
+  skills:     {title:'Fähigkeiten',                  sub:'Sprachen, Technologien & Soft Skills'},
+  experience: {title:'Berufserfahrung',              sub:'Mein beruflicher Werdegang'},
+  projects:   {title:'Projekte',                     sub:'Was ich umgesetzt habe'},
+  more:       {title:'Mehr Infos',                   sub:'Hobbys, Kontakt & Qualifikationen'},
+};
+function switchTab(id, el){
+  document.querySelectorAll('.tab-content').forEach(t=>{t.classList.remove('active');t.style.display='none';});
+  const tab = document.getElementById('tab-'+id);
+  tab.style.display='block';
+  setTimeout(()=>tab.classList.add('active'),10);
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.mob-nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  const allSidebar=[...document.querySelectorAll('.nav-item')];
+  const allMobile=[...document.querySelectorAll('.mob-nav-item')];
+  let idx=allSidebar.indexOf(el); if(idx===-1)idx=allMobile.indexOf(el);
+  if(idx!==-1){ if(allSidebar[idx])allSidebar[idx].classList.add('active'); if(allMobile[idx])allMobile[idx].classList.add('active'); }
+  // Typing effect
+  const titleEl = document.getElementById('page-title');
+  typeTitle(tabMeta[id].title, titleEl);
+  document.getElementById('page-sub').textContent = tabMeta[id].sub;
+  document.querySelector('.main').scrollTo({top:0,behavior:'smooth'});
+  if(id==='skills') animateSkills();
+  setTimeout(revealAll, 100);
+}
+
+/* ═══════════════════════════════════════
+   SKILL BAR ANIMATION
+═══════════════════════════════════════ */
+function animateSkills(){
+  document.querySelectorAll('.skill-fill').forEach(bar=>{
+    bar.style.width='0';
+    setTimeout(()=>{ bar.style.width = bar.dataset.pct + '%'; }, 100);
+  });
+}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL (IntersectionObserver)
+═══════════════════════════════════════ */
+function revealAll(){
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
+}
+
+/* ═══════════════════════════════════════
+   TILT EFFECT ON CARDS
+═══════════════════════════════════════ */
+document.addEventListener('mousemove', e => {
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    const r = card.getBoundingClientRect();
+    const cx = r.left + r.width/2, cy = r.top + r.height/2;
+    const dx = (e.clientX - cx) / r.width;
+    const dy = (e.clientY - cy) / r.height;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if(dist < 0.8) {
+      card.style.transform = `perspective(600px) rotateY(${dx*6}deg) rotateX(${-dy*6}deg)`;
+    } else {
+      card.style.transform = '';
+    }
+  });
+});
+
+/* ═══════════════════════════════════════
+   MOUSE TRACK ON PROJECT CARD
+═══════════════════════════════════════ */
+function trackMouse(e, el){
+  const r = el.getBoundingClientRect();
+  el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  el.style.setProperty('--my', (e.clientY - r.top)  + 'px');
+}
+
+/* ═══════════════════════════════════════
+   LANGUAGE RING ANIMATION
+═══════════════════════════════════════ */
+function animateLangRings(){
+  document.querySelectorAll('.ring-fill').forEach(ring => {
+    const target = parseFloat(ring.dataset.offset || 0);
+    ring.style.strokeDashoffset = '125.6';
+    setTimeout(()=>{ ring.style.transition='stroke-dashoffset 1.2s cubic-bezier(.16,1,.3,1)'; ring.style.strokeDashoffset = target; }, 200);
+  });
+}
+
+/* ═══════════════════════════════════════
+   INIT ON LOAD
+═══════════════════════════════════════ */
+window.addEventListener('load', ()=>{
+  animateSkills();
+  animateLangRings();
+  revealAll();
+
+  // Animate language dots
+  document.querySelectorAll('.lang-dot.on').forEach((d,i)=>{
+    d.style.opacity='0'; d.style.transform='scale(0)';
+    d.style.transition=`all .3s ${i*.06}s`;
+    setTimeout(()=>{ d.style.opacity='1'; d.style.transform='scale(1)'; }, 400+i*60);
+  });
+
+  // Counter animation
+  document.querySelectorAll('.stat-val').forEach(el=>{
+    const raw=el.textContent; const num=parseInt(raw);
+    if(!isNaN(num)){
+      let cur=0; const suffix=raw.replace(String(num),'');
+      const step=Math.ceil(num/30);
+      const t=setInterval(()=>{ cur=Math.min(cur+step,num); el.textContent=cur+suffix; if(cur>=num)clearInterval(t); },40);
+    }
+  });
+
+  // Typing effect on initial load
+  const titleEl = document.getElementById('page-title');
+  typeTitle('Allgemeiner Überblick', titleEl);
+});
+</script>
+</body>
+</html>
