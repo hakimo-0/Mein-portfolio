@@ -602,7 +602,7 @@
         <div class="contact-grid">
           <div class="contact-mini">
             <div class="contact-mini-label"><i class="fa-solid fa-envelope"></i> E-Mail</div>
-            <div class="contact-mini-val"><a href="mailto:arguiouane.abdelhakim@gmail.com" style="color:var(--p2);text-decoration:none">arguiouane.abdelhakim@gmail.com</a></div>
+            <div class="contact-mini-val"><a href="/cdn-cgi/l/email-protection#8decffeaf8e4e2f8ece3e8a3ecefe9e8e1e5ece6e4e0cdeae0ece4e1a3eee2e0" style="color:var(--p2);text-decoration:none"><span class="__cf_email__" data-cfemail="4a2b382d3f23253f2b242f642b282e2f26222b2123270a2d272b232664292527">[email&#160;protected]</span></a></div>
           </div>
           <div class="contact-mini">
             <div class="contact-mini-label"><i class="fa-solid fa-phone"></i> Telefon</div>
@@ -622,6 +622,52 @@
 
   </main>
 </div>
+
+<!-- ══════════════ PROFILE BOTTOM SHEET ══════════════ -->
+<div class="profile-sheet-backdrop" id="profileBackdrop" onclick="closeProfile()"></div>
+<div class="profile-sheet" id="profileSheet">
+  <div class="profile-sheet-handle"></div>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+    <button onclick="closeProfile()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 12px;color:var(--t2);cursor:pointer;font-size:12px;">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div style="text-align:center;padding-bottom:20px;border-bottom:1px solid var(--border)">
+    <div class="ps-avatar-ring">
+      <div class="ps-avatar-inner">
+        <img src="img/img cv.jpeg" alt="Profil"
+          onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-size:32px;font-weight:800;color:var(--p2);font-family:var(--font-h)\'>AA</div>'">
+      </div>
+    </div>
+    <div class="ps-name">Arguiouane Abdelhakim</div>
+    <div class="ps-role">Frontend &amp; Backend Entwickler</div>
+    <span class="online-badge" style="margin-top:10px;display:inline-flex">
+      <span class="online-dot"></span>Verfügbar
+    </span>
+  </div>
+  <div class="ps-info-grid">
+    <div class="ps-info-item"><i class="fa-solid fa-location-dot" style="color:var(--p2)"></i><span>Errachidia, Marokko</span></div>
+    <div class="ps-info-item"><i class="fa-solid fa-cake-candles" style="color:var(--p2)"></i><span>26.01.2005</span></div>
+    <div class="ps-info-item"><i class="fa-solid fa-envelope" style="color:var(--p2)"></i><span>arguiouane.abdelhakim@gmail.com</span></div>
+    <div class="ps-info-item"><i class="fa-brands fa-github" style="color:var(--p2)"></i><span>github.com/hakimo-0</span></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <a href="lebenslauf/lebenslauf.pdf" download class="dl-btn" style="flex:1;justify-content:center">
+      <i class="fa-solid fa-file-arrow-down"></i> Lebenslauf
+    </a>
+    <a href="contact.html" target="_blank" class="btn-ghost" style="flex:1;justify-content:center;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:12px">
+      <i class="fa-solid fa-envelope"></i> Kontakt
+    </a>
+  </div>
+</div>
+
+<!-- Floating profile avatar button (mobile only) -->
+<button class="mob-fab-profile" onclick="openProfile()" aria-label="Profil öffnen">
+  <div class="mob-fab-ring">
+    <img src="img/img cv.jpeg" alt="Profil"
+      onerror="this.style.display='none';this.parentElement.innerHTML='AA'">
+  </div>
+</button>
 
 <!-- ══════════════ MOBILE BOTTOM NAV ══════════════ -->
 <nav class="mobile-nav">
@@ -647,7 +693,7 @@
   </button>
 </nav>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ═══════════════════════════════════════
    CUSTOM CURSOR GLOW
 ═══════════════════════════════════════ */
@@ -851,10 +897,35 @@ window.addEventListener('load', ()=>{
       const t=setInterval(()=>{ cur=Math.min(cur+step,num); el.textContent=cur+suffix; if(cur>=num)clearInterval(t); },40);
     }
   });
-
-  // Restore last active tab (ex: projects) after refresh
-  switchTab(getInitialTabId());
+  const titleEl = document.getElementById('page-title');
+  if(titleEl) typeTitle('Allgemeiner Überblick', titleEl);
 });
+
+/* ═══ PROFILE SHEET ═══ */
+function openProfile(){
+  document.getElementById('profileSheet').classList.add('open');
+  document.getElementById('profileBackdrop').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeProfile(){
+  document.getElementById('profileSheet').classList.remove('open');
+  document.getElementById('profileBackdrop').classList.remove('open');
+  document.body.style.overflow='';
+}
+(function(){
+  const sheet=document.getElementById('profileSheet');
+  let startY=0;
+  sheet.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
+  sheet.addEventListener('touchmove',e=>{
+    const dy=e.touches[0].clientY-startY;
+    if(dy>0) sheet.style.transform=`translateY(${dy}px)`;
+  },{passive:true});
+  sheet.addEventListener('touchend',e=>{
+    const dy=e.changedTouches[0].clientY-startY;
+    sheet.style.transform='';
+    if(dy>80) closeProfile();
+  });
+})();
 </script>
 </body>
 </html>
