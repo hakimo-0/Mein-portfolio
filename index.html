@@ -6,7 +6,7 @@
 <title>Arguiouane Abdelhakim — Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="style.css?v=20260408"/>
 <style>
 /* ═══ CUSTOM CURSOR ═══ */
 .cursor-glow{
@@ -116,6 +116,7 @@
 }
 </style>
 </head>
+
 <body>
 
 <div class="cursor-glow" id="cursorGlow"></div>
@@ -153,27 +154,27 @@
 
     <div style="margin-bottom:24px">
       <div class="nav-label">Navigation</div>
-      <div class="nav-item active" onclick="switchTab('overview',this)">
+      <div class="nav-item active" onclick="switchTab('overview',this)" data-tab="overview">
         <div class="nav-icon"><i class="fa-solid fa-house"></i></div>
         Überblick
         <span class="nav-tooltip">Allgemeiner Überblick</span>
       </div>
-      <div class="nav-item" onclick="switchTab('skills',this)">
+      <div class="nav-item" onclick="switchTab('skills',this)" data-tab="skills">
         <div class="nav-icon"><i class="fa-solid fa-bolt"></i></div>
         Fähigkeiten
         <span class="nav-tooltip">Skills &amp; Technologien</span>
       </div>
-      <div class="nav-item" onclick="switchTab('experience',this)">
+      <div class="nav-item" onclick="switchTab('experience',this)" data-tab="experience">
         <div class="nav-icon"><i class="fa-solid fa-briefcase"></i></div>
         Erfahrung
         <span class="nav-tooltip">Beruflicher Werdegang</span>
       </div>
-      <div class="nav-item" onclick="switchTab('projects',this)">
+      <div class="nav-item" onclick="switchTab('projects',this)" data-tab="projects">
         <div class="nav-icon"><i class="fa-solid fa-rocket"></i></div>
         Projekte
         <span class="nav-tooltip">Meine Projekte</span>
       </div>
-      <div class="nav-item" onclick="switchTab('more',this)">
+      <div class="nav-item" onclick="switchTab('more',this)" data-tab="more">
         <div class="nav-icon"><i class="fa-solid fa-sparkles"></i></div>
         Mehr
         <span class="nav-tooltip">Hobbys &amp; Kontakt</span>
@@ -624,23 +625,23 @@
 
 <!-- ══════════════ MOBILE BOTTOM NAV ══════════════ -->
 <nav class="mobile-nav">
-  <button class="mob-nav-item active" onclick="switchTab('overview',this)" data-mob>
+  <button class="mob-nav-item active" onclick="switchTab('overview',this)" data-mob data-tab="overview">
     <i class="fa-solid fa-house"></i>
     Überblick
   </button>
-  <button class="mob-nav-item" onclick="switchTab('skills',this)" data-mob>
+  <button class="mob-nav-item" onclick="switchTab('skills',this)" data-mob data-tab="skills">
     <i class="fa-solid fa-bolt"></i>
     Skills
   </button>
-  <button class="mob-nav-item" onclick="switchTab('experience',this)" data-mob>
+  <button class="mob-nav-item" onclick="switchTab('experience',this)" data-mob data-tab="experience">
     <i class="fa-solid fa-briefcase"></i>
     Erfahrung
   </button>
-  <button class="mob-nav-item" onclick="switchTab('projects',this)" data-mob>
+  <button class="mob-nav-item" onclick="switchTab('projects',this)" data-mob data-tab="projects">
     <i class="fa-solid fa-rocket"></i>
     Projekte
   </button>
-  <button class="mob-nav-item" onclick="switchTab('more',this)" data-mob>
+  <button class="mob-nav-item" onclick="switchTab('more',this)" data-mob data-tab="more">
     <i class="fa-solid fa-ellipsis"></i>
     Mehr
   </button>
@@ -726,18 +727,38 @@ const tabMeta = {
   projects:   {title:'Projekte',                     sub:'Was ich umgesetzt habe'},
   more:       {title:'Mehr Infos',                   sub:'Hobbys, Kontakt & Qualifikationen'},
 };
+
+function getInitialTabId(){
+  const fromHash = (location.hash || '').replace(/^#/, '');
+  if(fromHash && tabMeta[fromHash]) return fromHash;
+
+  try{
+    const fromStorage = localStorage.getItem('activeTab');
+    if(fromStorage && tabMeta[fromStorage]) return fromStorage;
+  }catch(e){}
+
+  return 'overview';
+}
+
+function persistActiveTab(id){
+  try{ localStorage.setItem('activeTab', id); }catch(e){}
+  try{
+    const next = '#'+id;
+    if(location.hash !== next) history.replaceState(null,'',next);
+  }catch(e){}
+}
+
 function switchTab(id, el){
-  document.querySelectorAll('.tab-content').forEach(t=>{t.classList.remove('active');t.style.display='none';});
+  if(!tabMeta[id]) id = 'overview';
+  document.querySelectorAll('.tab-content').forEach(t=>{t.classList.remove('active');t.style.display='';});
   const tab = document.getElementById('tab-'+id);
-  tab.style.display='block';
+  if(!tab) return;
+  tab.style.display='';
   setTimeout(()=>tab.classList.add('active'),10);
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.querySelectorAll('.mob-nav-item').forEach(n=>n.classList.remove('active'));
-  el.classList.add('active');
-  const allSidebar=[...document.querySelectorAll('.nav-item')];
-  const allMobile=[...document.querySelectorAll('.mob-nav-item')];
-  let idx=allSidebar.indexOf(el); if(idx===-1)idx=allMobile.indexOf(el);
-  if(idx!==-1){ if(allSidebar[idx])allSidebar[idx].classList.add('active'); if(allMobile[idx])allMobile[idx].classList.add('active'); }
+  document.querySelectorAll(`.nav-item[data-tab="${id}"], .mob-nav-item[data-tab="${id}"]`).forEach(n=>n.classList.add('active'));
+  if(el) el.classList.add('active');
   // Typing effect
   const titleEl = document.getElementById('page-title');
   typeTitle(tabMeta[id].title, titleEl);
@@ -745,6 +766,7 @@ function switchTab(id, el){
   document.querySelector('.main').scrollTo({top:0,behavior:'smooth'});
   if(id==='skills') animateSkills();
   setTimeout(revealAll, 100);
+  persistActiveTab(id);
 }
 
 /* ═══════════════════════════════════════
@@ -830,9 +852,8 @@ window.addEventListener('load', ()=>{
     }
   });
 
-  // Typing effect on initial load
-  const titleEl = document.getElementById('page-title');
-  typeTitle('Allgemeiner Überblick', titleEl);
+  // Restore last active tab (ex: projects) after refresh
+  switchTab(getInitialTabId());
 });
 </script>
 </body>
