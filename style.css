@@ -154,11 +154,11 @@ body{
   overflow:visible;
 }
 .avatar-inner img{
-  width:180px;
+  width:220px;
   height:auto;
-  max-height:190px;
+  max-height:220px;
   object-fit:contain;
-  border-radius:90px;
+  border-radius:45px;
   display:block;
 }
 
